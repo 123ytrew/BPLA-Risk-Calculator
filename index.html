@@ -454,6 +454,16 @@
         .card {
             animation: fadeUp 0.5s ease backwards;
         }
+        
+        .safety-class {
+            display: inline-block;
+            background: #eef4fc;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -466,6 +476,7 @@
     </div>
 
     <div class="grid">
+        <!-- КАЛЬКУЛЯТОР -->
         <div class="card">
             <div class="card-header">
                 <i class="fas fa-chart-line"></i>
@@ -541,11 +552,13 @@
                 <div id="resultArea" style="display: none;">
                     <div id="riskMeter" class="result-card"></div>
                     <div id="riskDescription" style="margin-top: 0.7rem; font-size: 0.85rem; text-align: center;"></div>
+                    <div id="safetyClassBlock" class="safety-class"></div>
                     <div id="recommendationsBlock" class="recommend-list"></div>
                 </div>
             </div>
         </div>
 
+        <!-- ПРАВАЯ КОЛОНКА -->
         <div>
             <div class="card">
                 <div class="card-header">
@@ -627,6 +640,7 @@
         </div>
     </div>
 
+    <!-- ИСТОЧНИКИ -->
     <div class="references-section">
         <div class="ref-header">
             <h3><i class="fas fa-book-open"></i> Научно-методическая база</h3>
@@ -651,36 +665,11 @@
     </div>
 
     <div class="footer">
-        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Математическая модель на основе СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
+        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Методика интегрирует требования СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
     </div>
 </div>
 
 <script>
-    // Функция расчёта риска для одного фактора
-    // value: текущее значение
-    // threshold: порог, после которого риск начинает расти
-    // maxVal: максимальное значение (при котором риск = вес)
-    // weight: максимальный вклад фактора в общий риск
-    // exponent: степень нелинейности (чем выше, тем быстрее рост)
-    function calcFactorRisk(value, threshold, maxVal, weight, exponent = 1.2) {
-        if (value <= threshold) {
-            // Базовый риск 5% от веса при нормальных значениях
-            return weight * 0.05;
-        }
-        let ratio = Math.min(1, (value - threshold) / (maxVal - threshold));
-        return weight * Math.pow(ratio, exponent);
-    }
-
-    // Для обратных факторов (где большее значение = меньше риска)
-    // value: текущее значение (0-1.5), norm: норматив (хорошее значение), maxBad: максимально плохое
-    function calcInverseFactorRisk(value, norm, maxBad, weight, exponent = 1.5) {
-        if (value >= norm) {
-            return weight * 0.05;
-        }
-        let ratio = Math.min(1, (norm - value) / (norm - maxBad));
-        return weight * Math.pow(ratio, exponent);
-    }
-
     function calculateRisk() {
         const screenHours = parseFloat(document.getElementById('screenHours').value);
         const staticHours = parseFloat(document.getElementById('staticHours').value);
@@ -699,27 +688,83 @@
             ergo: 8
         };
 
-        // Экран: порог 2 ч (начало превышения непрерывной нормы), максимум 8 ч
-        let screenRisk = calcFactorRisk(screenHours, 2, 8, weights.screen, 1.2);
-        
-        // Статика: порог 2 ч (начало превышения), максимум 8 ч
-        let staticRisk = calcFactorRisk(staticHours, 2, 8, weights.static, 1.2);
-        
-        // Перерывы: обратный фактор, норматив 1 (хороший режим), максимум плохого 0
-        let breaksRisk = calcInverseFactorRisk(breaksMode, 1, 0, weights.breaks, 1.5);
-        
-        // Зрительная нагрузка: обратный фактор, норматив 1 (умеренная), максимум плохого 0
-        let visualRisk = calcInverseFactorRisk(visualLoad, 1, 0, weights.visual, 1.5);
-        
-        // Стресс: обратный фактор, норматив 1 (умеренный), максимум плохого 0
-        let stressRisk = calcInverseFactorRisk(stressLevel, 1, 0, weights.stress, 1.5);
-        
-        // Эргономика: обратный фактор, норматив 1 (хорошая), максимум плохого 0
-        let ergoRisk = calcInverseFactorRisk(ergonomics, 1, 0, weights.ergo, 1.5);
-        
+        // ----- РАСЧЁТ КАЖДОГО ФАКТОРА -----
+        // Экран: норма до 6 ч (общая за смену)
+        let screenRisk = 0;
+        if (screenHours > 6) {
+            screenRisk = weights.screen;
+        } else if (screenHours > 4) {
+            screenRisk = weights.screen * 0.7;
+        } else if (screenHours > 2) {
+            screenRisk = weights.screen * 0.3;
+        } else {
+            screenRisk = weights.screen * 0.05;
+        }
+
+        // Статика: норма до 4 ч
+        let staticRisk = 0;
+        if (staticHours > 6) {
+            staticRisk = weights.static;
+        } else if (staticHours > 4) {
+            staticRisk = weights.static * 0.7;
+        } else if (staticHours > 2) {
+            staticRisk = weights.static * 0.25;
+        } else {
+            staticRisk = weights.static * 0.05;
+        }
+
+        // Перерывы: норма ≥1 (хороший режим)
+        let breaksRisk = 0;
+        if (breaksMode < 0.3) {
+            breaksRisk = weights.breaks;
+        } else if (breaksMode < 0.7) {
+            breaksRisk = weights.breaks * 0.7;
+        } else if (breaksMode < 1) {
+            breaksRisk = weights.breaks * 0.4;
+        } else {
+            breaksRisk = weights.breaks * 0.05;
+        }
+
+        // Зрение: норма ≥1 (умеренная)
+        let visualRisk = 0;
+        if (visualLoad < 0.3) {
+            visualRisk = weights.visual;
+        } else if (visualLoad < 0.7) {
+            visualRisk = weights.visual * 0.7;
+        } else if (visualLoad < 1) {
+            visualRisk = weights.visual * 0.35;
+        } else {
+            visualRisk = weights.visual * 0.05;
+        }
+
+        // Стресс: оптимум при 1 (умеренный), отклонения в обе стороны повышают риск
+        let stressRisk = 0;
+        if (stressLevel <= 0.3 || stressLevel >= 1.2) {
+            stressRisk = weights.stress;
+        } else if (stressLevel <= 0.6 || stressLevel >= 1.1) {
+            stressRisk = weights.stress * 0.6;
+        } else if (stressLevel <= 0.8 || stressLevel >= 1.05) {
+            stressRisk = weights.stress * 0.3;
+        } else {
+            stressRisk = weights.stress * 0.05;
+        }
+
+        // Эргономика: норма ≥1 (эргономично)
+        let ergoRisk = 0;
+        if (ergonomics < 0.3) {
+            ergoRisk = weights.ergo;
+        } else if (ergonomics < 0.7) {
+            ergoRisk = weights.ergo * 0.7;
+        } else if (ergonomics < 1) {
+            ergoRisk = weights.ergo * 0.35;
+        } else {
+            ergoRisk = weights.ergo * 0.05;
+        }
+
         let totalRisk = screenRisk + staticRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
         totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk)));
-        
+
+        // Определение уровня риска
         let level, colorClass, description;
         if (totalRisk < 30) {
             level = 'Низкий уровень риска';
@@ -734,17 +779,26 @@
             colorClass = 'risk-high';
             description = 'Критическая нагрузка. Высокий риск астенопии, дорсопатий, синдрома запястного канала. Необходимо срочное изменение условий труда и медицинское обследование.';
         }
-        
+
+        // Класс условий труда (по аналогии с СОУТ)
+        let safetyClass = '';
+        if (totalRisk <= 20) safetyClass = 'Класс 1 (оптимальные условия труда)';
+        else if (totalRisk <= 40) safetyClass = 'Класс 2 (допустимые условия труда)';
+        else if (totalRisk <= 60) safetyClass = 'Класс 3.1 (вредные условия труда 1-й степени)';
+        else if (totalRisk <= 80) safetyClass = 'Класс 3.2 (вредные условия труда 2-й степени)';
+        else safetyClass = 'Класс 3.3–3.4 (вредные условия труда высокой степени)';
+
+        // Формирование рекомендаций
         const recommendations = [];
-        
+
         if (screenHours > 6) {
             recommendations.push('⚠️ Общая длительность работы за экраном превышает 6 часов — выше норматива СанПиН 1.2.3685-21. Сократите смену.');
         } else if (screenHours > 2) {
-            recommendations.push('👁️ Непрерывная работа за экраном не должна превышать 2 часов. Каждые 2 часа делайте перерыв 10–15 минут (СанПиН 1.2.3685-21).');
+            recommendations.push('👁️ Непрерывная работа за экраном не должна превышать 2 часов. Каждые 2 часа делайте перерыв 10–15 минут.');
         }
         
         if (staticHours > 4) {
-            recommendations.push('🧘 Статическая нагрузка превышает 4 часа (Р 2.2.2006-05). Обязательно делайте микропаузы каждые 30–40 минут с изменением позы и разминкой.');
+            recommendations.push('🧘 Статическая нагрузка превышает 4 часа (Р 2.2.2006-05). Обязательно делайте микропаузы каждые 30–40 минут с изменением позы.');
         } else if (staticHours > 2) {
             recommendations.push('🧘 Для профилактики остеохондроза делайте микропаузу каждый час: встаньте, наклоны головы, вращения плечами.');
         }
@@ -754,35 +808,36 @@
         }
         
         if (visualLoad < 0.8) {
-            recommendations.push('💡 Высокая зрительная нагрузка. Используйте антибликовые фильтры, настройте яркость экрана, каждые 20 минут смотрите вдаль на 20 секунд.');
+            recommendations.push('💡 Высокая зрительная нагрузка. Используйте антибликовые фильтры, правило 20-20-20.');
         }
         
-        if (stressLevel < 0.8) {
-            recommendations.push('🧠 Повышенное психоэмоциональное напряжение. Освойте дыхательные техники (4 секунды вдох — 4 задержка — 6 выдох), нормируйте нагрузку.');
+        if (stressLevel < 0.7 || stressLevel > 1.1) {
+            recommendations.push('🧠 Отклонение от оптимального уровня стресса. Практикуйте дыхательные техники (4-4-6), нормируйте нагрузку.');
         }
         
         if (ergonomics < 0.8) {
-            recommendations.push('🪑 Неудовлетворительная эргономика. Настройте рабочее место: стопы на полу, поясничная поддержка, экран на уровне глаз, подставка под запястья.');
+            recommendations.push('🪑 Неудовлетворительная эргономика. Настройте рабочее место: стопы на полу, экран на уровне глаз, поддержка поясницы.');
         }
         
         if (recommendations.length === 0) {
             recommendations.push('✨ Все показатели в пределах нормы. Поддерживайте текущий уровень профилактики. Регулярно проходите медосмотры (офтальмолог, невролог).');
         }
-        
-        return { totalRisk, level, colorClass, description, recommendations };
+
+        return { totalRisk, level, colorClass, description, safetyClass, recommendations };
     }
-    
+
     function updateSliders() {
         document.getElementById('screenHoursVal').innerText = document.getElementById('screenHours').value + ' ч';
         document.getElementById('staticHoursVal').innerText = document.getElementById('staticHours').value + ' ч';
     }
-    
+
     function displayResult() {
         const result = calculateRisk();
         const meter = document.getElementById('riskMeter');
         meter.className = `result-card ${result.colorClass}`;
         meter.innerHTML = `<div class="risk-score">${result.totalRisk} / 100</div><div style="font-weight: 600; margin-top: 0.3rem;">${result.level}</div>`;
         document.getElementById('riskDescription').innerText = result.description;
+        document.getElementById('safetyClassBlock').innerHTML = `<i class="fas fa-briefcase"></i> ${result.safetyClass}`;
         
         let recHtml = '<div style="display: flex; gap: 0.5rem; margin-bottom: 0.7rem;"><i class="fas fa-clipboard-list"></i><strong>Персонализированные рекомендации</strong></div><ul>';
         result.recommendations.forEach(r => { 
@@ -793,19 +848,19 @@
         document.getElementById('resultArea').style.display = 'block';
         document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    
+
     function toggleFaq(element) {
         const answer = element.parentElement.querySelector('.faq-answer');
         const icon = element.querySelector('.fa-chevron-down');
         answer.classList.toggle('show');
         if (icon) icon.style.transform = answer.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0)';
     }
-    
+
     document.getElementById('screenHours').addEventListener('input', updateSliders);
     document.getElementById('staticHours').addEventListener('input', updateSliders);
     document.getElementById('calculateBtn').addEventListener('click', displayResult);
     updateSliders();
-    
+
     const surveyLink = document.getElementById('surveyLink');
     surveyLink.href = 'https://forms.gle/htADyEVxDsAjjLH36';
 </script>
