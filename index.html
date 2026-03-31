@@ -39,7 +39,7 @@
         }
 
         .header {
-            margin-bottom: 2.8rem;
+            margin-bottom: 2.5rem;
             animation: fadeUp 0.55s ease;
         }
 
@@ -60,7 +60,7 @@
             height: 4px;
             background: linear-gradient(90deg, #2c7cb6, #7ab3c8);
             border-radius: 4px;
-            margin: 1rem 0 0.8rem;
+            margin: 0.8rem 0 0.8rem;
         }
 
         .header p {
@@ -493,7 +493,7 @@
                         <span id="screenHoursVal" class="range-value-badge">5 ч</span>
                         <span>10 ч</span>
                     </div>
-                    <div style="font-size: 0.65rem; color: #6c8eb0; margin-top: 4px;">Норматив: до 6 ч/смену (СанПиН 1.2.3685-21). Риск начинает накапливаться с 2 часов.</div>
+                    <div style="font-size: 0.65rem; color: #6c8eb0; margin-top: 4px;">Норматив: до 6 ч/смену (СанПиН 1.2.3685-21). Риск накапливается с 2 часов.</div>
                 </div>
 
                 <div class="form-group">
@@ -510,11 +510,14 @@
                 <div class="form-group">
                     <label><i class="fas fa-hourglass-half"></i>Режим перерывов</label>
                     <select id="breaksMode">
-                        <option value="1.66">Перерывы каждые 20–30 минут + разминка</option>
-                        <option value="1.33">Перерывы каждые 30–40 минут</option>
+                        <option value="1.5">Перерывы каждые 20–25 минут + разминка (идеально)</option>
+                        <option value="1.33">Перерывы каждые 30–40 минут (отлично)</option>
+                        <option value="1.2">Перерывы каждые 40–50 минут (хорошо)</option>
                         <option value="1.0" selected>Перерывы каждые 45–60 минут (норма)</option>
-                        <option value="0.66">Перерывы каждые 1.5–2 часа</option>
-                        <option value="0.33">Перерывы каждые 2–3 часа</option>
+                        <option value="0.8">Перерывы каждые 1.5–2 часа</option>
+                        <option value="0.6">Перерывы каждые 2–3 часа</option>
+                        <option value="0.4">Перерывы редко, 3–4 часа</option>
+                        <option value="0.2">Перерывы очень редко</option>
                         <option value="0">Перерывы отсутствуют</option>
                     </select>
                 </div>
@@ -522,24 +525,30 @@
                 <div class="form-group">
                     <label><i class="fas fa-eye"></i>Зрительная нагрузка</label>
                     <select id="visualLoad">
-                        <option value="1.66">Очень низкая (антиблик, качественные дисплеи)</option>
+                        <option value="1.5">Очень низкая (идеальные условия, антиблик)</option>
                         <option value="1.33">Низкая</option>
+                        <option value="1.2">Ниже среднего</option>
                         <option value="1.0" selected>Умеренная (норма)</option>
-                        <option value="0.66">Повышенная</option>
-                        <option value="0.33">Высокая (длительная фокусировка)</option>
-                        <option value="0">Очень высокая (блики, мелкие объекты)</option>
+                        <option value="0.8">Повышенная</option>
+                        <option value="0.6">Высокая</option>
+                        <option value="0.4">Очень высокая</option>
+                        <option value="0.2">Критическая</option>
+                        <option value="0">Экстремальная (блики, мелкие объекты)</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-brain"></i>Психоэмоциональное напряжение</label>
                     <select id="stressLevel">
-                        <option value="1.5">Низкое (комфортный график)</option>
+                        <option value="1.5">Низкое (комфортный график, отдых)</option>
                         <option value="1.33">Пониженное</option>
+                        <option value="1.2">Ниже среднего</option>
                         <option value="1.0" selected>Умеренное (норма)</option>
-                        <option value="0.66">Повышенное</option>
-                        <option value="0.33">Высокое (нештатные ситуации)</option>
-                        <option value="0">Экстремальное (боевое применение)</option>
+                        <option value="0.8">Повышенное</option>
+                        <option value="0.6">Высокое (нештатные ситуации)</option>
+                        <option value="0.4">Очень высокое</option>
+                        <option value="0.2">Экстремальное</option>
+                        <option value="0">Критическое (боевое применение)</option>
                     </select>
                 </div>
 
@@ -548,9 +557,12 @@
                     <select id="ergonomics">
                         <option value="1.5">Идеально (стоя-сидя, индивидуальные настройки)</option>
                         <option value="1.33">Очень хорошо</option>
+                        <option value="1.2">Хорошо</option>
                         <option value="1.0" selected>Эргономично (норма)</option>
-                        <option value="0.66">Частично эргономично</option>
-                        <option value="0.33">Неэргономично</option>
+                        <option value="0.8">Частично эргономично</option>
+                        <option value="0.6">Неэргономично</option>
+                        <option value="0.4">Плохо</option>
+                        <option value="0.2">Очень плохо</option>
                         <option value="0">Критически неэргономично</option>
                     </select>
                 </div>
@@ -675,13 +687,34 @@
     </div>
 
     <div class="footer">
-        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Линейная модель на основе СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
+        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Модель на основе СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
     </div>
 </div>
 
 <script>
+    // Параметры модели
+    const params = {
+        screen: { ideal: 2, max: 10, weight: 24 },
+        stat: { ideal: 2, max: 10, weight: 20 },
+        breaks: { ideal: 1.33, maxBad: 0, weight: 13 },
+        visual: { ideal: 1.33, maxBad: 0, weight: 9 },
+        stress: { ideal: 1.33, maxBad: 0, weight: 10 },
+        ergo: { ideal: 1.33, maxBad: 0, weight: 7 }
+    };
+
+    function linearRisk(value, ideal, maxVal, weight) {
+        if (value <= ideal) return 0;
+        let ratio = Math.min(1, (value - ideal) / (maxVal - ideal));
+        return weight * ratio;
+    }
+
+    function discreteRisk(value, ideal, maxBad, weight) {
+        if (value >= ideal) return 0;
+        let ratio = Math.min(1, (ideal - value) / (ideal - maxBad));
+        return weight * ratio;
+    }
+
     function calculateRisk() {
-        // Получаем значения
         const screen = parseFloat(document.getElementById('screenHours').value);
         const stat = parseFloat(document.getElementById('staticHours').value);
         const breaks = parseFloat(document.getElementById('breaksMode').value);
@@ -689,33 +722,19 @@
         const stress = parseFloat(document.getElementById('stressLevel').value);
         const ergo = parseFloat(document.getElementById('ergonomics').value);
 
-        // Веса
-        const w = { screen: 30, stat: 25, breaks: 15, visual: 10, stress: 12, ergo: 8 };
-
-        // Функция для экрана и статики (непрерывные факторы)
-        function linearFactor(value, threshold, maxVal, weight) {
-            if (value <= threshold) return 0;
-            let ratio = Math.min(1, (value - threshold) / (maxVal - threshold));
-            return weight * ratio;
-        }
-
-        // Функция для дискретных факторов (перерывы, зрение, стресс, эргономика)
-        function discreteFactor(value, norm, weight) {
-            if (value >= norm) return 0;
-            let ratio = Math.min(1, (norm - value) / norm);
-            return weight * ratio;
-        }
-
-        // Расчёт
-        let screenRisk = linearFactor(screen, 2, 10, w.screen);
-        let statRisk = linearFactor(stat, 2, 10, w.stat);
-        let breaksRisk = discreteFactor(breaks, 1.0, w.breaks);
-        let visualRisk = discreteFactor(visual, 1.0, w.visual);
-        let stressRisk = discreteFactor(stress, 1.0, w.stress);
-        let ergoRisk = discreteFactor(ergo, 1.0, w.ergo);
+        let screenRisk = linearRisk(screen, params.screen.ideal, params.screen.max, params.screen.weight);
+        let statRisk = linearRisk(stat, params.stat.ideal, params.stat.max, params.stat.weight);
+        let breaksRisk = discreteRisk(breaks, params.breaks.ideal, params.breaks.maxBad, params.breaks.weight);
+        let visualRisk = discreteRisk(visual, params.visual.ideal, params.visual.maxBad, params.visual.weight);
+        let stressRisk = discreteRisk(stress, params.stress.ideal, params.stress.maxBad, params.stress.weight);
+        let ergoRisk = discreteRisk(ergo, params.ergo.ideal, params.ergo.maxBad, params.ergo.weight);
 
         let totalRisk = screenRisk + statRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
-        totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk)));
+        
+        // Нормируем до 100, так как сумма весов может быть меньше 100
+        let maxPossible = params.screen.weight + params.stat.weight + params.breaks.weight + 
+                          params.visual.weight + params.stress.weight + params.ergo.weight;
+        totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk * 100 / maxPossible)));
 
         // Определение уровня риска
         let level, colorClass, description;
