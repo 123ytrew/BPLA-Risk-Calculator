@@ -30,16 +30,6 @@
             z-index: -2;
         }
 
-        .bg-accent::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 70% 30%, rgba(0, 112, 243, 0.03) 0%, transparent 70%);
-        }
-
         .container {
             max-width: 1300px;
             margin: 0 auto;
@@ -436,6 +426,9 @@
             .header h1 {
                 font-size: 2rem;
             }
+            .container {
+                padding: 1.2rem;
+            }
         }
 
         .footer {
@@ -481,23 +474,25 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label><i class="fas fa-display"></i>Длительность работы за экраном / пультом</label>
+                    <label><i class="fas fa-display"></i>Длительность работы за экраном / пультом (за смену)</label>
                     <input type="range" id="screenHours" min="0" max="12" step="0.5" value="4">
                     <div class="range-values">
                         <span>0 ч</span>
                         <span id="screenHoursVal" class="range-value-badge">4 ч</span>
                         <span>>8 ч (критично)</span>
                     </div>
+                    <div style="font-size: 0.65rem; color: #6c8eb0; margin-top: 4px;">Норматив: до 6 ч/смену, непрерывно не более 2 ч (СанПиН 1.2.3685-21)</div>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-couch"></i>Статическая поза без разминки (за пультом)</label>
-                    <input type="range" id="staticHours" min="0" max="12" step="0.5" value="3.5">
+                    <input type="range" id="staticHours" min="0" max="12" step="0.5" value="3">
                     <div class="range-values">
                         <span>0 ч</span>
-                        <span id="staticHoursVal" class="range-value-badge">3.5 ч</span>
-                        <span>>6 ч</span>
+                        <span id="staticHoursVal" class="range-value-badge">3 ч</span>
+                        <span>>6 ч (высокий риск)</span>
                     </div>
+                    <div style="font-size: 0.65rem; color: #6c8eb0; margin-top: 4px;">Оптимально до 4 ч/смену (Р 2.2.2006-05)</div>
                 </div>
 
                 <div class="form-group">
@@ -567,7 +562,7 @@
                         </div>
                         <div class="tip-item">
                             <h4><i class="fas fa-spine"></i>Опорно-двигательный аппарат</h4>
-                            <p>Каждый час — микропауза: наклоны головы, вращение плеч, подъём со стула. Монитор на уровне глаз.</p>
+                            <p>Каждый час — микропауза: наклоны головы, вращение плеч, подъём со стула. Монитор на уровне глаз, поясничный валик.</p>
                         </div>
                         <div class="tip-item">
                             <h4><i class="fas fa-hand-peace"></i>Кисти / синдром запястного канала</h4>
@@ -592,28 +587,28 @@
                             <span>Нормативная длительность работы за пультом БПЛА</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="faq-answer">СанПиН 1.2.3685-21: непрерывная работа за экраном — не более 2 часов. Общая длительность за смену — до 6 часов при регламентированных перерывах.</div>
+                        <div class="faq-answer">СанПиН 1.2.3685-21: непрерывная работа за экраном — не более 2 часов. Общая длительность за смену — до 6 часов при регламентированных перерывах (10–15 мин каждые 1,5–2 ч).</div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">
                             <span>Первые признаки профессионального переутомления</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="faq-answer">Сухость и резь в глазах, головная боль, боль в шейно-воротниковой зоне, онемение пальцев, раздражительность.</div>
+                        <div class="faq-answer">Сухость и резь в глазах, головная боль, боль в шейно-воротниковой зоне, онемение пальцев, раздражительность, снижение концентрации.</div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">
                             <span>Эргономическая настройка рабочего места</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="faq-answer">Верхний край монитора на уровне глаз, расстояние 50–70 см, поясничная поддержка, запястья прямые.</div>
+                        <div class="faq-answer">Верхний край монитора на уровне глаз, расстояние 50–70 см, поясничная поддержка, предплечья параллельны полу, запястья прямые.</div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">
                             <span>Синдром запястного канала: профилактика</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="faq-answer">Регулярные перерывы, упражнения на растяжку кистей, эргономичный джойстик/мышь.</div>
+                        <div class="faq-answer">Регулярные перерывы, упражнения на растяжку кистей, эргономичный джойстик/мышь. При первых симптомах — консультация невролога.</div>
                     </div>
                 </div>
             </div>
@@ -641,25 +636,26 @@
         </div>
         <div class="ref-list">
             <ul>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> СанПиН 1.2.3685-21 «Гигиенические нормативы...»</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Руководство Р 2.2.2006-05 «Гигиеническая оценка факторов рабочей среды»</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ГОСТ Р ИСО 9241-210-2016 «Эргономика взаимодействия человек-система»</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Приказ Минздрава РФ № 29н «Порядок медосмотров»</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> EU-OSHA: OSH in figures — drone industry, 2023</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Rosenfield M. Computer vision syndrome. Ophthalmic & Physiological Optics, 2016</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Rempel D. Work-related musculoskeletal disorders. Journal of Hand Surgery, 2021</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Harris W. Ergonomic risk assessment of remote pilot stations. IJIE, 2022</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Широкова Н.В., Гурвич В.Б. Гигиена труда операторов БПЛА. Медицина труда, 2024</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ГОСТ Р 56955-2016 «Беспилотные авиационные системы. Эргономические требования»</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> NIOSH: Occupational risk factors for UAV operators, 2023</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Lee Y.H. Visual fatigue while operating drone GCS. Applied Ergonomics, 2023</li>
-                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ФЗ № 426-ФЗ «О специальной оценке условий труда»</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> СанПиН 1.2.3685-21 «Гигиенические нормативы и требования к обеспечению безопасности и (или) безвредности для человека факторов среды обитания».</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Руководство Р 2.2.2006-05 «Руководство по гигиенической оценке факторов рабочей среды и трудового процесса».</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Трудовой кодекс РФ (ст. 212, 213, 219 — охрана труда, режимы труда и отдыха).</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ГОСТ Р ИСО 9241-210-2016 «Эргономика взаимодействия человек-система».</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Приказ Минздрава РФ № 29н «Об утверждении Порядка проведения обязательных предварительных и периодических медицинских осмотров».</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> EU-OSHA: OSH in figures — drone industry, 2023.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Rosenfield M. Computer vision syndrome. Ophthalmic & Physiological Optics, 2016.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Rempel D. Work-related musculoskeletal disorders. Journal of Hand Surgery, 2021.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Harris W. Ergonomic risk assessment of remote pilot stations. IJIE, 2022.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Широкова Н.В., Гурвич В.Б. Гигиена труда операторов БПЛА. Медицина труда, 2024.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ГОСТ Р 56955-2016 «Беспилотные авиационные системы. Эргономические требования».</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> NIOSH: Occupational risk factors for UAV operators, 2023.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> Lee Y.H. Visual fatigue while operating drone GCS. Applied Ergonomics, 2023.</li>
+                <li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ФЗ № 426-ФЗ «О специальной оценке условий труда».</li>
             </ul>
         </div>
     </div>
 
     <div class="footer">
-        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Методика интегрирует требования СанПиН, Р 2.2.2006-05</span>
+        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Методика интегрирует требования СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
     </div>
 </div>
 
@@ -672,81 +668,114 @@
         const stressLevel = parseFloat(document.getElementById('stressLevel').value);
         const ergonomics = parseFloat(document.getElementById('ergonomics').value);
 
-        // Нормализация (0-100)
+        // Расчет рисков на основе нормативов СанПиН и Р 2.2.2006-05
         let screenRisk = 0;
-        if (screenHours > 4) screenRisk = 20 + (screenHours - 4) * 5;
-        else if (screenHours > 2) screenRisk = (screenHours - 2) * 7;
-        
+        if (screenHours > 6) screenRisk = 35;
+        else if (screenHours > 4) screenRisk = 25;
+        else if (screenHours > 2) screenRisk = 15;
+        else screenRisk = 5;
+
         let staticRisk = 0;
-        if (staticHours > 4) staticRisk = 15 + (staticHours - 4) * 5;
-        else if (staticHours > 2) staticRisk = (staticHours - 2) * 6;
-        
-        let breaksRisk = (1.5 - breaksMode) * 20;
-        let visualRisk = (1.5 - visualLoad) * 18;
-        let stressRisk = (1.5 - stressLevel) * 22;
-        let ergoRisk = (1.5 - ergonomics) * 15;
-        
+        if (staticHours > 6) staticRisk = 30;
+        else if (staticHours > 4) staticRisk = 20;
+        else if (staticHours > 2) staticRisk = 10;
+        else staticRisk = 5;
+
+        let breaksRisk = (1.5 - breaksMode) * 18;
+        let visualRisk = (1.5 - visualLoad) * 15;
+        let stressRisk = (1.5 - stressLevel) * 20;
+        let ergoRisk = (1.5 - ergonomics) * 12;
+
         let totalRisk = screenRisk + staticRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
         totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk)));
-        
+
         let level, colorClass, description;
         if (totalRisk < 35) {
             level = 'Низкий уровень риска';
             colorClass = 'risk-low';
-            description = 'Показатели в пределах нормы. Риск минимален.';
+            description = 'Показатели в пределах физиологической нормы. Вероятность профессиональных заболеваний минимальна.';
         } else if (totalRisk < 65) {
             level = 'Средний уровень риска';
             colorClass = 'risk-mid';
-            description = 'Требуется коррекция режима и усиление профилактики.';
+            description = 'Сформированы предпосылки для развития профзаболеваний. Требуется коррекция режима труда и внедрение профилактических мер.';
         } else {
             level = 'Высокий уровень риска';
             colorClass = 'risk-high';
-            description = 'Критическая нагрузка. Необходимо изменить условия труда.';
+            description = 'Критическая нагрузка. Высокий риск астенопии, дорсопатий, синдрома запястного канала. Необходимо срочное изменение условий труда и медицинское обследование.';
+        }
+
+        const recommendations = [];
+        
+        // Рекомендации строго по нормативам
+        if (screenHours > 6) {
+            recommendations.push('⚠️ Общая длительность работы за экраном превышает 6 часов — это выше норматива СанПиН 1.2.3685-21. Сократите смену или увеличьте количество перерывов.');
+        } else if (screenHours > 2 && screenHours <= 6) {
+            recommendations.push('👁️ Непрерывная работа за экраном не должна превышать 2 часов. Каждые 2 часа делайте перерыв 10–15 минут (СанПиН 1.2.3685-21).');
         }
         
-        const recommendations = [];
-        if (screenHours > 3) recommendations.push('Сократите непрерывную работу за экраном до 2 часов, используйте правило 20-20-20.');
-        if (staticHours > 3) recommendations.push('Каждый час вставайте, делайте разминку для шеи и спины.');
-        if (breaksMode < 0.8) recommendations.push('Установите таймер перерывов каждые 30–40 минут.');
-        if (visualLoad < 0.8) recommendations.push('Используйте антиблик, делайте гимнастику для глаз.');
-        if (stressLevel < 0.8) recommendations.push('Освойте дыхательные техники (4-4-6) для снижения стресса.');
-        if (ergonomics < 0.8) recommendations.push('Настройте рабочее место: экран на уровне глаз, поддержка поясницы.');
-        if (recommendations.length === 0) recommendations.push('Поддерживайте текущий уровень профилактики.');
+        if (staticHours > 4) {
+            recommendations.push('🧘 Статическая нагрузка превышает 4 часа (Р 2.2.2006-05). Обязательно делайте микропаузы каждые 30–40 минут с изменением позы и разминкой.');
+        } else if (staticHours > 2 && staticHours <= 4) {
+            recommendations.push('🧘 Статическая нагрузка в пределах нормы. Для профилактики остеохондроза делайте микропаузы каждый час: встаньте, наклоны головы, вращения плечами.');
+        }
         
+        if (breaksMode < 0.8) {
+            recommendations.push('⏰ Режим перерывов недостаточный. Оптимально: каждые 45–60 минут — перерыв 5–10 минут, каждые 2 часа — полноценный перерыв 15 минут.');
+        }
+        
+        if (visualLoad < 0.8) {
+            recommendations.push('💡 Высокая зрительная нагрузка. Используйте антибликовые фильтры, настройте яркость экрана, каждые 20 минут смотрите вдаль на 20 секунд.');
+        }
+        
+        if (stressLevel < 0.8) {
+            recommendations.push('🧠 Повышенное психоэмоциональное напряжение. Освойте дыхательные техники (4 секунды вдох — 4 задержка — 6 выдох), нормируйте нагрузку.');
+        }
+        
+        if (ergonomics < 0.8) {
+            recommendations.push('🪑 Неудовлетворительная эргономика. Настройте рабочее место: стопы на полу, поясничная поддержка, экран на уровне глаз, подставка под запястья.');
+        }
+        
+        if (recommendations.length === 0) {
+            recommendations.push('✨ Ваши показатели в пределах нормы. Поддерживайте текущий уровень профилактики. Регулярно проходите медосмотры (офтальмолог, невролог).');
+        }
+
         return { totalRisk, level, colorClass, description, recommendations };
     }
-    
+
     function updateSliders() {
         document.getElementById('screenHoursVal').innerText = document.getElementById('screenHours').value + ' ч';
         document.getElementById('staticHoursVal').innerText = document.getElementById('staticHours').value + ' ч';
     }
-    
+
     function displayResult() {
         const result = calculateRisk();
         const meter = document.getElementById('riskMeter');
         meter.className = `result-card ${result.colorClass}`;
         meter.innerHTML = `<div class="risk-score">${result.totalRisk} / 100</div><div style="font-weight: 600; margin-top: 0.3rem;">${result.level}</div>`;
         document.getElementById('riskDescription').innerText = result.description;
-        let recHtml = '<div style="display: flex; gap: 0.5rem; margin-bottom: 0.7rem;"><i class="fas fa-clipboard-list"></i><strong>Рекомендации</strong></div><ul>';
-        result.recommendations.forEach(r => { recHtml += `<li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ${r}</li>`; });
+        
+        let recHtml = '<div style="display: flex; gap: 0.5rem; margin-bottom: 0.7rem;"><i class="fas fa-clipboard-list"></i><strong>Персонализированные рекомендации</strong></div><ul>';
+        result.recommendations.forEach(r => { 
+            recHtml += `<li><i class="fas fa-circle" style="font-size: 0.4rem;"></i> ${r}</li>`; 
+        });
         recHtml += '</ul>';
         document.getElementById('recommendationsBlock').innerHTML = recHtml;
         document.getElementById('resultArea').style.display = 'block';
         document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    
+
     function toggleFaq(element) {
         const answer = element.parentElement.querySelector('.faq-answer');
         const icon = element.querySelector('.fa-chevron-down');
         answer.classList.toggle('show');
         if (icon) icon.style.transform = answer.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0)';
     }
-    
+
     document.getElementById('screenHours').addEventListener('input', updateSliders);
     document.getElementById('staticHours').addEventListener('input', updateSliders);
     document.getElementById('calculateBtn').addEventListener('click', displayResult);
     updateSliders();
-    
+
     const surveyLink = document.getElementById('surveyLink');
     surveyLink.href = 'https://forms.gle/htADyEVxDsAjjLH36';
 </script>
