@@ -511,9 +511,9 @@
                     <label><i class="fas fa-hourglass-half"></i>Режим перерывов</label>
                     <select id="breaksMode">
                         <option value="1.5">Перерывы каждые 20–25 минут + разминка (идеально)</option>
-                        <option value="1.33">Перерывы каждые 30–40 минут (отлично)</option>
-                        <option value="1.2">Перерывы каждые 40–50 минут (хорошо)</option>
-                        <option value="1.0" selected>Перерывы каждые 45–60 минут (норма)</option>
+                        <option value="1.4" selected>Перерывы каждые 30–40 минут (отлично)</option>
+                        <option value="1.2">Перерывы каждые 45–50 минут (хорошо)</option>
+                        <option value="1.0">Перерывы каждые 45–60 минут (норма)</option>
                         <option value="0.8">Перерывы каждые 1.5–2 часа</option>
                         <option value="0.6">Перерывы каждые 2–3 часа</option>
                         <option value="0.4">Перерывы редко, 3–4 часа</option>
@@ -526,9 +526,9 @@
                     <label><i class="fas fa-eye"></i>Зрительная нагрузка</label>
                     <select id="visualLoad">
                         <option value="1.5">Очень низкая (идеальные условия, антиблик)</option>
-                        <option value="1.33">Низкая</option>
-                        <option value="1.2">Ниже среднего</option>
-                        <option value="1.0" selected>Умеренная (норма)</option>
+                        <option value="1.4" selected>Низкая (отлично)</option>
+                        <option value="1.2">Ниже среднего (хорошо)</option>
+                        <option value="1.0">Умеренная (норма)</option>
                         <option value="0.8">Повышенная</option>
                         <option value="0.6">Высокая</option>
                         <option value="0.4">Очень высокая</option>
@@ -541,9 +541,9 @@
                     <label><i class="fas fa-brain"></i>Психоэмоциональное напряжение</label>
                     <select id="stressLevel">
                         <option value="1.5">Низкое (комфортный график, отдых)</option>
-                        <option value="1.33">Пониженное</option>
-                        <option value="1.2">Ниже среднего</option>
-                        <option value="1.0" selected>Умеренное (норма)</option>
+                        <option value="1.4" selected>Пониженное (отлично)</option>
+                        <option value="1.2">Ниже среднего (хорошо)</option>
+                        <option value="1.0">Умеренное (норма)</option>
                         <option value="0.8">Повышенное</option>
                         <option value="0.6">Высокое (нештатные ситуации)</option>
                         <option value="0.4">Очень высокое</option>
@@ -556,9 +556,9 @@
                     <label><i class="fas fa-desk"></i>Эргономика рабочего места</label>
                     <select id="ergonomics">
                         <option value="1.5">Идеально (стоя-сидя, индивидуальные настройки)</option>
-                        <option value="1.33">Очень хорошо</option>
+                        <option value="1.4" selected>Очень хорошо (отлично)</option>
                         <option value="1.2">Хорошо</option>
-                        <option value="1.0" selected>Эргономично (норма)</option>
+                        <option value="1.0">Эргономично (норма)</option>
                         <option value="0.8">Частично эргономично</option>
                         <option value="0.6">Неэргономично</option>
                         <option value="0.4">Плохо</option>
@@ -579,40 +579,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- ПРАВАЯ КОЛОНКА -->
-        <div>
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-leaf"></i>
-                    <h2>Профилактические меры</h2>
-                </div>
-                <div class="card-body">
-                    <div class="tips-grid">
-                        <div class="tip-item">
-                            <h4><i class="fas fa-eye"></i>Зрительная система</h4>
-                            <p>Правило 20‑20‑20: каждые 20 минут — 20 секунд взгляда вдаль (>6 м). Увлажняющие капли, антибликовые фильтры.</p>
-                        </div>
-                        <div class="tip-item">
-                            <h4><i class="fas fa-spine"></i>Опорно-двигательный аппарат</h4>
-                            <p>Каждый час — микропауза: наклоны головы, вращение плеч, подъём со стула. Монитор на уровне глаз, поясничный валик.</p>
-                        </div>
-                        <div class="tip-item">
-                            <h4><i class="fas fa-hand-peace"></i>Кисти / синдром запястного канала</h4>
-                            <p>Прямое положение запястий, подставка. Каждые 30 мин: сжатие‑разжатие, круговые движения кистями.</p>
-                        </div>
-                        <div class="tip-item">
-                            <h4><i class="fas fa-heart"></i>Нервная система и стресс</h4>
-                            <p>Дыхательные техники (4‑4‑6), микропаузы, нормирование нагрузки, качественный сон 7–8 часов.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-circle-question"></i>
-                    <h2>Ответы на ключевые вопросы</h2>
                 </div>
                 <div class="card-body">
                     <div class="faq-item">
@@ -692,15 +658,17 @@
 </div>
 
 <script>
-    // Параметры модели
+    // Параметры модели (финальные, согласованные)
     const params = {
-        screen: { ideal: 2, max: 10, weight: 24 },
-        stat: { ideal: 2, max: 10, weight: 20 },
-        breaks: { ideal: 1.33, maxBad: 0, weight: 13 },
-        visual: { ideal: 1.33, maxBad: 0, weight: 9 },
-        stress: { ideal: 1.33, maxBad: 0, weight: 10 },
-        ergo: { ideal: 1.33, maxBad: 0, weight: 7 }
+        screen: { ideal: 2, max: 10, weight: 27 },
+        stat:   { ideal: 2, max: 10, weight: 24 },
+        breaks: { ideal: 1.4, maxBad: 0, weight: 14 },
+        visual: { ideal: 1.4, maxBad: 0, weight: 11 },
+        stress: { ideal: 1.4, maxBad: 0, weight: 12 },
+        ergo:   { ideal: 1.4, maxBad: 0, weight: 9 }
     };
+    const maxPossible = params.screen.weight + params.stat.weight + params.breaks.weight +
+                        params.visual.weight + params.stress.weight + params.ergo.weight; // 97
 
     function linearRisk(value, ideal, maxVal, weight) {
         if (value <= ideal) return 0;
@@ -729,12 +697,8 @@
         let stressRisk = discreteRisk(stress, params.stress.ideal, params.stress.maxBad, params.stress.weight);
         let ergoRisk = discreteRisk(ergo, params.ergo.ideal, params.ergo.maxBad, params.ergo.weight);
 
-        let totalRisk = screenRisk + statRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
-        
-        // Нормируем до 100, так как сумма весов может быть меньше 100
-        let maxPossible = params.screen.weight + params.stat.weight + params.breaks.weight + 
-                          params.visual.weight + params.stress.weight + params.ergo.weight;
-        totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk * 100 / maxPossible)));
+        let totalRaw = screenRisk + statRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
+        let totalRisk = Math.min(100, Math.max(0, Math.round(totalRaw * 100 / maxPossible)));
 
         // Определение уровня риска
         let level, colorClass, description;
@@ -838,3 +802,36 @@
 </script>
 </body>
 </html>
+        <!-- ПРАВАЯ КОЛОНКА -->
+        <div>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-leaf"></i>
+                    <h2>Профилактические меры</h2>
+                </div>
+                <div class="card-body">
+                    <div class="tips-grid">
+                        <div class="tip-item">
+                            <h4><i class="fas fa-eye"></i>Зрительная система</h4>
+                            <p>Правило 20‑20‑20: каждые 20 минут — 20 секунд взгляда вдаль (>6 м). Увлажняющие капли, антибликовые фильтры.</p>
+                        </div>
+                        <div class="tip-item">
+                            <h4><i class="fas fa-spine"></i>Опорно-двигательный аппарат</h4>
+                            <p>Каждый час — микропауза: наклоны головы, вращение плеч, подъём со стула. Монитор на уровне глаз, поясничный валик.</p>
+                        </div>
+                        <div class="tip-item">
+                            <h4><i class="fas fa-hand-peace"></i>Кисти / синдром запястного канала</h4>
+                            <p>Прямое положение запястий, подставка. Каждые 30 мин: сжатие‑разжатие, круговые движения кистями.</p>
+                        </div>
+                        <div class="tip-item">
+                            <h4><i class="fas fa-heart"></i>Нервная система и стресс</h4>
+                            <p>Дыхательные техники (4‑4‑6), микропаузы, нормирование нагрузки, качественный сон 7–8 часов.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-circle-question"></i>
+                    <h2>Ответы на ключевые вопросы</h2>
