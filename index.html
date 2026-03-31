@@ -677,8 +677,8 @@
     // Функция линейного расчёта риска для непрерывных факторов (экран, статика)
     function linearRisk(value, norm, maxVal, weight) {
         if (value <= norm) {
-            // Базовый риск 5% от веса при значениях в норме
-            return weight * 0.05;
+            // Базовый риск 15% от веса при значениях в норме
+            return weight * 0.15;
         }
         let ratio = Math.min(1, (value - norm) / (maxVal - norm));
         return weight * ratio;
@@ -691,11 +691,11 @@
             // Значения лучше нормы дают минимальный риск
             let better = (value - norm) / 0.5; // максимум улучшения до 1.5
             let reduction = Math.min(0.5, better * 0.3);
-            return weight * (0.05 - reduction);
+            return weight * (0.15 - reduction);
         } else {
             // Значения хуже нормы — риск растёт линейно
             let ratio = Math.min(1, (norm - value) / norm);
-            return weight * (0.05 + ratio * 0.95);
+            return weight * (0.15 + ratio * 0.95);
         }
     }
 
@@ -735,7 +735,7 @@
         if (stressLevel < 1) {
             // Повышенный или экстремальный стресс — риск растёт
             let ratio = Math.min(1, (1 - stressLevel) / 1);
-            stressRisk = weights.stress * (0.05 + ratio * 0.95);
+            stressRisk = weights.stress * (0.15 + ratio * 0.95);
         } else {
             // Низкий стресс (комфорт) — минимальный риск
             stressRisk = weights.stress * 0.05;
