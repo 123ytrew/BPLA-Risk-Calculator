@@ -668,33 +668,33 @@
         const stressLevel = parseFloat(document.getElementById('stressLevel').value);
         const ergonomics = parseFloat(document.getElementById('ergonomics').value);
 
-        // Расчет рисков на основе нормативов СанПиН и Р 2.2.2006-05
+        // Риск-скор на основе нормативов (0-100)
         let screenRisk = 0;
         if (screenHours > 6) screenRisk = 35;
-        else if (screenHours > 4) screenRisk = 25;
-        else if (screenHours > 2) screenRisk = 15;
-        else screenRisk = 5;
+        else if (screenHours > 4) screenRisk = 20;
+        else if (screenHours > 2) screenRisk = 10;
+        else screenRisk = 0;
 
         let staticRisk = 0;
         if (staticHours > 6) staticRisk = 30;
-        else if (staticHours > 4) staticRisk = 20;
-        else if (staticHours > 2) staticRisk = 10;
-        else staticRisk = 5;
+        else if (staticHours > 4) staticRisk = 15;
+        else if (staticHours > 2) staticRisk = 5;
+        else staticRisk = 0;
 
-        let breaksRisk = (1.5 - breaksMode) * 18;
-        let visualRisk = (1.5 - visualLoad) * 15;
-        let stressRisk = (1.5 - stressLevel) * 20;
-        let ergoRisk = (1.5 - ergonomics) * 12;
+        let breaksRisk = (1.5 - breaksMode) * 15;
+        let visualRisk = (1.5 - visualLoad) * 12;
+        let stressRisk = (1.5 - stressLevel) * 18;
+        let ergoRisk = (1.5 - ergonomics) * 10;
 
         let totalRisk = screenRisk + staticRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
         totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk)));
 
         let level, colorClass, description;
-        if (totalRisk < 35) {
+        if (totalRisk < 30) {
             level = 'Низкий уровень риска';
             colorClass = 'risk-low';
             description = 'Показатели в пределах физиологической нормы. Вероятность профессиональных заболеваний минимальна.';
-        } else if (totalRisk < 65) {
+        } else if (totalRisk < 60) {
             level = 'Средний уровень риска';
             colorClass = 'risk-mid';
             description = 'Сформированы предпосылки для развития профзаболеваний. Требуется коррекция режима труда и внедрение профилактических мер.';
@@ -705,18 +705,18 @@
         }
 
         const recommendations = [];
-        
+
         // Рекомендации строго по нормативам
         if (screenHours > 6) {
             recommendations.push('⚠️ Общая длительность работы за экраном превышает 6 часов — это выше норматива СанПиН 1.2.3685-21. Сократите смену или увеличьте количество перерывов.');
-        } else if (screenHours > 2 && screenHours <= 6) {
+        } else if (screenHours > 2) {
             recommendations.push('👁️ Непрерывная работа за экраном не должна превышать 2 часов. Каждые 2 часа делайте перерыв 10–15 минут (СанПиН 1.2.3685-21).');
         }
         
         if (staticHours > 4) {
             recommendations.push('🧘 Статическая нагрузка превышает 4 часа (Р 2.2.2006-05). Обязательно делайте микропаузы каждые 30–40 минут с изменением позы и разминкой.');
-        } else if (staticHours > 2 && staticHours <= 4) {
-            recommendations.push('🧘 Статическая нагрузка в пределах нормы. Для профилактики остеохондроза делайте микропаузы каждый час: встаньте, наклоны головы, вращения плечами.');
+        } else if (staticHours > 2) {
+            recommendations.push('🧘 Статическая нагрузка в пределах нормы. Для профилактики остеохондроза делайте микропаузу каждый час: встаньте, наклоны головы, вращения плечами.');
         }
         
         if (breaksMode < 0.8) {
@@ -736,7 +736,7 @@
         }
         
         if (recommendations.length === 0) {
-            recommendations.push('✨ Ваши показатели в пределах нормы. Поддерживайте текущий уровень профилактики. Регулярно проходите медосмотры (офтальмолог, невролог).');
+            recommendations.push('✨ Все показатели в пределах нормы. Поддерживайте текущий уровень профилактики. Регулярно проходите медосмотры (офтальмолог, невролог).');
         }
 
         return { totalRisk, level, colorClass, description, recommendations };
