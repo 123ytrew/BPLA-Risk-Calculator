@@ -738,7 +738,7 @@
 
         // Определение уровня риска
         let level, colorClass, description;
-        if (totalRisk < 25) {
+        if (totalRisk < 35) {
             level = 'Низкий уровень риска';
             colorClass = 'risk-low';
             description = 'Показатели в пределах нормы. Риск минимален. Рекомендуется поддерживать текущий режим.';
@@ -756,7 +756,7 @@
         let safetyClass = '';
         if (totalRisk <= 20) safetyClass = 'Класс 1 (оптимальные условия труда)';
         else if (totalRisk <= 35) safetyClass = 'Класс 2 (допустимые условия труда)';
-        else if (totalRisk <= 55) safetyClass = 'Класс 3.1 (вредные условия труда 1-й степени)';
+        else if (totalRisk <= 50) safetyClass = 'Класс 3.1 (вредные условия труда 1-й степени)';
         else if (totalRisk <= 75) safetyClass = 'Класс 3.2 (вредные условия труда 2-й степени)';
         else safetyClass = 'Класс 3.3–3.4 (вредные условия труда высокой степени)';
 
