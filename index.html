@@ -491,7 +491,7 @@
                         <span id="screenHoursVal" class="range-value-badge">3 ч</span>
                         <span>12 ч</span>
                     </div>
-                    <div style="font-size: 0.65rem; color: #6c8eb0; margin-top: 4px;">Норматив: до 6 ч/смену, непрерывно не более 2 ч (СанПиН 1.2.3685-21)</div>
+                    <div style="font-size: 0.65rem; color: #6c8eb0; margin-top: 4px;">Норматив: до 6 ч/смену (СанПиН 1.2.3685-21)</div>
                 </div>
 
                 <div class="form-group">
@@ -509,9 +509,11 @@
                     <label><i class="fas fa-hourglass-half"></i>Режим перерывов</label>
                     <select id="breaksMode">
                         <option value="0">Перерывы отсутствуют</option>
-                        <option value="0.5">Перерывы каждые 2 часа</option>
+                        <option value="0.33">Перерывы каждые 2–3 часа</option>
+                        <option value="0.66">Перерывы каждые 1.5–2 часа</option>
                         <option value="1" selected>Перерывы каждые 45–60 минут</option>
-                        <option value="1.5">Перерывы каждые 30 минут + эргономическая разминка</option>
+                        <option value="1.33">Перерывы каждые 30–40 минут</option>
+                        <option value="1.66">Перерывы каждые 20–30 минут + разминка</option>
                     </select>
                 </div>
 
@@ -519,9 +521,11 @@
                     <label><i class="fas fa-eye"></i>Зрительная нагрузка</label>
                     <select id="visualLoad">
                         <option value="0">Очень высокая (блики, мелкие объекты, >2 мониторов)</option>
-                        <option value="0.5">Высокая (длительная фокусировка, неоптимальное освещение)</option>
+                        <option value="0.33">Высокая (длительная фокусировка, неоптимальное освещение)</option>
+                        <option value="0.66">Повышенная</option>
                         <option value="1" selected>Умеренная</option>
-                        <option value="1.5">Низкая (антиблик, качественные дисплеи)</option>
+                        <option value="1.33">Низкая</option>
+                        <option value="1.66">Очень низкая (антиблик, качественные дисплеи)</option>
                     </select>
                 </div>
 
@@ -665,11 +669,36 @@
     </div>
 
     <div class="footer">
-        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Методика интегрирует требования СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
+        <span>© 2026 | Калькулятор профессиональных рисков оператора БПЛА | Линейная модель риска на основе СанПиН 1.2.3685-21, Р 2.2.2006-05</span>
     </div>
 </div>
 
 <script>
+    // Функция линейного расчёта риска для непрерывных факторов (экран, статика)
+    function linearRisk(value, norm, maxVal, weight) {
+        if (value <= norm) {
+            // Базовый риск 5% от веса при значениях в норме
+            return weight * 0.05;
+        }
+        let ratio = Math.min(1, (value - norm) / (maxVal - norm));
+        return weight * ratio;
+    }
+
+    // Функция для дискретных факторов (перерывы, зрение, стресс, эргономика)
+    // где значения от 0 до 1.5, норма = 1 (хорошо)
+    function discreteRisk(value, norm, weight) {
+        if (value >= norm) {
+            // Значения лучше нормы дают минимальный риск
+            let better = (value - norm) / 0.5; // максимум улучшения до 1.5
+            let reduction = Math.min(0.5, better * 0.3);
+            return weight * (0.05 - reduction);
+        } else {
+            // Значения хуже нормы — риск растёт линейно
+            let ratio = Math.min(1, (norm - value) / norm);
+            return weight * (0.05 + ratio * 0.95);
+        }
+    }
+
     function calculateRisk() {
         const screenHours = parseFloat(document.getElementById('screenHours').value);
         const staticHours = parseFloat(document.getElementById('staticHours').value);
@@ -688,78 +717,32 @@
             ergo: 8
         };
 
-        // ----- РАСЧЁТ КАЖДОГО ФАКТОРА -----
-        // Экран: норма до 6 ч (общая за смену)
-        let screenRisk = 0;
-        if (screenHours > 6) {
-            screenRisk = weights.screen;
-        } else if (screenHours > 4) {
-            screenRisk = weights.screen * 0.7;
-        } else if (screenHours > 2) {
-            screenRisk = weights.screen * 0.3;
-        } else {
-            screenRisk = weights.screen * 0.05;
-        }
-
-        // Статика: норма до 4 ч
-        let staticRisk = 0;
-        if (staticHours > 6) {
-            staticRisk = weights.static;
-        } else if (staticHours > 4) {
-            staticRisk = weights.static * 0.7;
-        } else if (staticHours > 2) {
-            staticRisk = weights.static * 0.25;
-        } else {
-            staticRisk = weights.static * 0.05;
-        }
-
-        // Перерывы: норма ≥1 (хороший режим)
-        let breaksRisk = 0;
-        if (breaksMode < 0.3) {
-            breaksRisk = weights.breaks;
-        } else if (breaksMode < 0.7) {
-            breaksRisk = weights.breaks * 0.7;
-        } else if (breaksMode < 1) {
-            breaksRisk = weights.breaks * 0.4;
-        } else {
-            breaksRisk = weights.breaks * 0.05;
-        }
-
-        // Зрение: норма ≥1 (умеренная)
-        let visualRisk = 0;
-        if (visualLoad < 0.3) {
-            visualRisk = weights.visual;
-        } else if (visualLoad < 0.7) {
-            visualRisk = weights.visual * 0.7;
-        } else if (visualLoad < 1) {
-            visualRisk = weights.visual * 0.35;
-        } else {
-            visualRisk = weights.visual * 0.05;
-        }
-
-        // Стресс: оптимум при 1 (умеренный), отклонения в обе стороны повышают риск
+        // Расчёт каждого фактора
+        // Экран: норма 6 ч/смену, максимум 12 ч
+        let screenRisk = linearRisk(screenHours, 6, 12, weights.screen);
+        
+        // Статика: норма 4 ч/смену, максимум 12 ч
+        let staticRisk = linearRisk(staticHours, 4, 12, weights.static);
+        
+        // Перерывы: норма 1 (45-60 мин), хуже — риск выше
+        let breaksRisk = discreteRisk(breaksMode, 1, weights.breaks);
+        
+        // Зрение: норма 1 (умеренная), хуже — риск выше
+        let visualRisk = discreteRisk(visualLoad, 1, weights.visual);
+        
+        // Стресс: норма 1 (умеренный), ТОЛЬКО повышенный даёт риск, низкий — безопасен
         let stressRisk = 0;
-        if (stressLevel <= 0.3 || stressLevel >= 1.2) {
-            stressRisk = weights.stress;
-        } else if (stressLevel <= 0.6 || stressLevel >= 1.1) {
-            stressRisk = weights.stress * 0.6;
-        } else if (stressLevel <= 0.8 || stressLevel >= 1.05) {
-            stressRisk = weights.stress * 0.3;
+        if (stressLevel < 1) {
+            // Повышенный или экстремальный стресс — риск растёт
+            let ratio = Math.min(1, (1 - stressLevel) / 1);
+            stressRisk = weights.stress * (0.05 + ratio * 0.95);
         } else {
+            // Низкий стресс (комфорт) — минимальный риск
             stressRisk = weights.stress * 0.05;
         }
-
-        // Эргономика: норма ≥1 (эргономично)
-        let ergoRisk = 0;
-        if (ergonomics < 0.3) {
-            ergoRisk = weights.ergo;
-        } else if (ergonomics < 0.7) {
-            ergoRisk = weights.ergo * 0.7;
-        } else if (ergonomics < 1) {
-            ergoRisk = weights.ergo * 0.35;
-        } else {
-            ergoRisk = weights.ergo * 0.05;
-        }
+        
+        // Эргономика: норма 1 (эргономично), хуже — риск выше
+        let ergoRisk = discreteRisk(ergonomics, 1, weights.ergo);
 
         let totalRisk = screenRisk + staticRisk + breaksRisk + visualRisk + stressRisk + ergoRisk;
         totalRisk = Math.min(100, Math.max(0, Math.round(totalRisk)));
@@ -811,8 +794,8 @@
             recommendations.push('💡 Высокая зрительная нагрузка. Используйте антибликовые фильтры, правило 20-20-20.');
         }
         
-        if (stressLevel < 0.7 || stressLevel > 1.1) {
-            recommendations.push('🧠 Отклонение от оптимального уровня стресса. Практикуйте дыхательные техники (4-4-6), нормируйте нагрузку.');
+        if (stressLevel < 0.8) {
+            recommendations.push('🧠 Повышенное психоэмоциональное напряжение. Практикуйте дыхательные техники (4-4-6), нормируйте нагрузку.');
         }
         
         if (ergonomics < 0.8) {
