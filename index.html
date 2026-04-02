@@ -703,7 +703,7 @@
     };
     const maxPossible = params.screen.weight + params.stat.weight + params.breaks.weight +
                         params.visual.weight + params.stress.weight + params.ergo.weight; // 97
-    const MULTIPLIER = 1.15; // множитель для усиления риска
+    const MULTIPLIER = 1.05; // множитель для усиления риска
 
     function linearRisk(value, ideal, maxVal, weight) {
         if (value <= ideal) return 0;
