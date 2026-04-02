@@ -751,12 +751,20 @@
         }
 
         // Класс условий труда (СОУТ)
-        let safetyClass = '';
-        if (totalRisk <= 25) safetyClass = 'Класс 1 (оптимальные условия труда)';
-        else if (totalRisk <= 35) safetyClass = 'Класс 2 (допустимые условия труда)';
-        else if (totalRisk <= 55) safetyClass = 'Класс 3.1 (вредные условия труда 1-й степени)';
-        else if (totalRisk <= 75) safetyClass = 'Класс 3.2 (вредные условия труда 2-й степени)';
-        else safetyClass = 'Класс 3.3–3.4 (вредные условия труда высокой степени)';
+let safetyClass = '';
+if (totalRisk <= 25) {
+    safetyClass = 'Класс 1 (оптимальные условия труда)';
+} else if (totalRisk <= 35) {
+    safetyClass = 'Класс 2 (допустимые условия труда)';
+} else if (totalRisk <= 55) {
+    safetyClass = 'Класс 3.1 (вредные условия труда 1-й степени)';
+} else if (totalRisk <= 65) {
+    safetyClass = 'Класс 3.2 (вредные условия труда 2-й степени)';
+} else if (totalRisk <= 75) {
+    safetyClass = 'Класс 3.3 (вредные условия труда 3-й степени)';
+} else {
+    safetyClass = 'Класс 4 (опасные условия труда)';
+};
 
         // Рекомендации
         const recommendations = [];
